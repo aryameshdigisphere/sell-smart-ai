@@ -1,0 +1,6 @@
+{
+  "name": "SELL SMART AI",
+  "description": "All-in-one ecommerce operations dashboard with sales & profit calculator, inventory & order management, and AI content studio.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
