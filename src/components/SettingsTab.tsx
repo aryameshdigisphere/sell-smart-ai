@@ -15,14 +15,22 @@ import {
   ExternalLink, 
   ShieldCheck, 
   FileText, 
-  Sparkles,
   Building,
   Sliders,
-  AlertTriangle
+  AlertTriangle,
+  AlertCircle,
+  User as UserIcon,
+  Lock,
+  LogIn,
+  LogOut,
+  Mail,
+  ShieldAlert
 } from 'lucide-react';
 import { Currency, TargetCountry, ContentTone, Product, Order, SavedScenario, SavedCopy } from '../types';
 import { CURRENCIES, formatCurrency } from '../utils/currencies';
 import { localiseText } from '../utils/localisation';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { User } from '@supabase/supabase-js';
 
 interface SettingsTabProps {
   currency: Currency;
@@ -67,6 +75,88 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
 
   const [copiedKeyGuide, setCopiedKeyGuide] = useState(false);
   const [importStatus, setImportStatus] = useState<string | null>(null);
+
+  // Supabase Authentication state
+  const [authUser, setAuthUser] = useState<User | null>(null);
+  const [authEmail, setAuthEmail] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
+  const [isSignUpMode, setIsSignUpMode] = useState(false);
+  const [authLoading, setAuthLoading] = useState(false);
+  const [authMessage, setAuthMessage] = useState<{ text: string; isError: boolean } | null>(null);
+
+  useEffect(() => {
+    if (!isSupabaseConfigured) return;
+
+    // Check active session on mount
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setAuthUser(session?.user ?? null);
+    });
+
+    // Listen for auth state changes (sign in, sign out, token refresh)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setAuthUser(session?.user ?? null);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  const handleAuthSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isSupabaseConfigured) {
+      setAuthMessage({ text: 'Please configure VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY in .env.local first.', isError: true });
+      return;
+    }
+    if (!authEmail.trim() || !authPassword.trim()) {
+      setAuthMessage({ text: 'Please enter both an email address and a password.', isError: true });
+      return;
+    }
+
+    setAuthLoading(true);
+    setAuthMessage(null);
+
+    try {
+      if (isSignUpMode) {
+        const { error, data } = await supabase.auth.signUp({
+          email: authEmail.trim(),
+          password: authPassword.trim(),
+        });
+        if (error) throw error;
+        if (data.user && !data.session) {
+          setAuthMessage({ text: 'Sign-up initiated! If email confirmation is enabled, check your inbox to confirm.', isError: false });
+        } else {
+          setAuthMessage({ text: 'Account created and signed in successfully!', isError: false });
+        }
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({
+          email: authEmail.trim(),
+          password: authPassword.trim(),
+        });
+        if (error) throw error;
+        setAuthMessage({ text: 'Signed in successfully with Supabase!', isError: false });
+        setAuthPassword('');
+      }
+    } catch (err: any) {
+      setAuthMessage({ text: err.message || 'Authentication failed. Please verify credentials.', isError: true });
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const handleSignOut = async () => {
+    setAuthLoading(true);
+    setAuthMessage(null);
+    try {
+      await supabase.auth.signOut();
+      setAuthUser(null);
+      setAuthMessage({ text: 'Signed out of Supabase successfully.', isError: false });
+    } catch (err: any) {
+      setAuthMessage({ text: err.message || 'Error signing out.', isError: true });
+    } finally {
+      setAuthLoading(false);
+    }
+  };
 
   // Sync settings
   useEffect(() => {
@@ -497,6 +587,178 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
               </p>
             </div>
 
+          </div>
+        </div>
+
+        {/* Card 5: Supabase Authentication Support */}
+        <div className="lg:col-span-2 bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                <Lock className="h-4 w-4" />
+              </div>
+              <div>
+                <h2 className="text-base font-bold text-white">Supabase Authentication Support</h2>
+                <p className="text-xs text-slate-400">Official @supabase/supabase-js client integration for user accounts & sessions</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              {isSupabaseConfigured ? (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  Supabase Configured
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                  <span className="w-2 h-2 rounded-full bg-amber-400" />
+                  Ready for Credentials
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 text-xs">
+            {/* Left: Live Auth Panel or Sign In / Up */}
+            <div className="lg:col-span-7 space-y-4">
+              {authUser ? (
+                /* Authenticated User State */
+                <div className="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="h-8 w-8 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-bold">
+                        {authUser.email?.[0]?.toUpperCase() || 'U'}
+                      </div>
+                      <div>
+                        <span className="font-bold text-white block text-sm">{authUser.email}</span>
+                        <span className="text-[10px] text-slate-400 font-mono">User ID: {authUser.id}</span>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleSignOut}
+                      disabled={authLoading}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-rose-300 hover:text-rose-200 border border-slate-700 transition"
+                    >
+                      <LogOut className="h-3.5 w-3.5" />
+                      <span>{authLoading ? 'Signing out...' : 'Sign Out'}</span>
+                    </button>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-700/60 text-[11px] text-slate-400 flex items-center gap-1.5">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                    <span>Active session authenticated via Supabase Auth. Tokens are refreshed automatically.</span>
+                  </div>
+                </div>
+              ) : (
+                /* Unauthenticated / Sign-In / Sign-Up Form */
+                <form onSubmit={handleAuthSubmit} className="p-4 rounded-xl bg-slate-800/40 border border-slate-700/60 space-y-3.5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-white text-xs">
+                      {isSignUpMode ? 'Create a Supabase User Account' : 'Sign In with Supabase Account'}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsSignUpMode(!isSignUpMode);
+                        setAuthMessage(null);
+                      }}
+                      className="text-[11px] text-indigo-400 hover:text-indigo-300 underline underline-offset-2"
+                    >
+                      {isSignUpMode ? 'Already have an account? Sign in' : 'Need an account? Sign up'}
+                    </button>
+                  </div>
+
+                  {authMessage && (
+                    <div className={`p-2.5 rounded-lg border text-xs flex items-start gap-2 ${
+                      authMessage.isError
+                        ? 'bg-rose-500/10 border-rose-500/30 text-rose-300'
+                        : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                    }`}>
+                      {authMessage.isError ? <AlertCircle className="h-4 w-4 shrink-0 text-rose-400 mt-0.5" /> : <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400 mt-0.5" />}
+                      <span>{authMessage.text}</span>
+                    </div>
+                  )}
+
+                  <div className="space-y-2.5">
+                    <div>
+                      <label className="text-slate-300 font-semibold block mb-1">Email Address</label>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                        <input
+                          type="email"
+                          required
+                          value={authEmail}
+                          onChange={(e) => setAuthEmail(e.target.value)}
+                          placeholder="seller@yourstore.com"
+                          className="w-full pl-9 pr-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-medium focus:outline-none focus:border-indigo-500"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-slate-300 font-semibold block mb-1">Password</label>
+                      <div className="relative">
+                        <Lock className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                        <input
+                          type="password"
+                          required
+                          value={authPassword}
+                          onChange={(e) => setAuthPassword(e.target.value)}
+                          placeholder="••••••••••••"
+                          className="w-full pl-9 pr-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white font-medium focus:outline-none focus:border-indigo-500"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1">
+                    <span className="text-[10px] text-slate-400">
+                      {isSupabaseConfigured ? 'Secured with client-side PKCE flow' : 'Simulated until keys are added'}
+                    </span>
+                    <button
+                      type="submit"
+                      disabled={authLoading}
+                      className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-semibold transition"
+                    >
+                      <LogIn className="h-3.5 w-3.5" />
+                      <span>{authLoading ? 'Processing...' : isSignUpMode ? 'Register Account' : 'Sign In'}</span>
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+
+            {/* Right: Security & Setup Instructions */}
+            <div className="lg:col-span-5 space-y-3">
+              <div className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2">
+                <span className="font-bold text-slate-200 flex items-center gap-1.5 text-xs">
+                  <ShieldCheck className="h-4 w-4 text-emerald-400" />
+                  Frontend Credential Safety Rule
+                </span>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Only provide your Supabase <strong className="text-slate-200">Publishable / Anon key</strong> in client environment variables. Never expose the <code className="text-rose-400 font-mono">service_role</code> secret key or database passwords in frontend code.
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2">
+                <span className="font-bold text-slate-200 text-xs block">Required Environment Variables:</span>
+                <div className="space-y-1 font-mono text-[11px]">
+                  <div className="p-1.5 rounded bg-slate-900 border border-slate-800 flex justify-between items-center text-slate-300">
+                    <span>VITE_SUPABASE_URL</span>
+                    <span className="text-[10px] text-emerald-400 font-sans">Project URL</span>
+                  </div>
+                  <div className="p-1.5 rounded bg-slate-900 border border-slate-800 flex justify-between items-center text-slate-300">
+                    <span>VITE_SUPABASE_PUBLISHABLE_KEY</span>
+                    <span className="text-[10px] text-teal-400 font-sans">Anon / Public</span>
+                  </div>
+                </div>
+                <p className="text-[10px] text-slate-500">
+                  Read cleanly via <code className="text-slate-400">import.meta.env</code> from <code className="text-slate-400">src/lib/supabase.ts</code>.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
