@@ -17,8 +17,9 @@ import { OrdersInventoryTab } from './components/OrdersInventoryTab';
 import { ContentStudioTab } from './components/ContentStudioTab';
 import { SettingsTab } from './components/SettingsTab';
 import { ResetConfirmModal } from './components/ResetConfirmModal';
+import { SubscriptionGate } from './components/SubscriptionGate';
 
-export default function App() {
+function Dashboard() {
   // Navigation State
   const [activeTab, setActiveTab] = useState<AppTab>('overview');
 
@@ -454,5 +455,14 @@ export default function App() {
       />
 
     </div>
+  );
+}
+
+// The dashboard is only reachable with an active subscription.
+export default function App() {
+  return (
+    <SubscriptionGate>
+      <Dashboard />
+    </SubscriptionGate>
   );
 }
