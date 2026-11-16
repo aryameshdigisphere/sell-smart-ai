@@ -1,8 +1,9 @@
 import { Event, Result, header, json, rawBody } from '../lib/http';
-import { ConfigError, priceFor, pricing, requireEnv } from '../lib/env';
+import { ConfigError, requireEnv } from '../lib/env';
 import { verifyWebhookSignature } from '../lib/crypto';
 import { fetchOrder } from '../lib/razorpay';
 import { recordPayment } from '../lib/supabase-admin';
+import { SUBSCRIPTION_MONTHS, priceFor } from '../../shared/pricing';
 
 /**
  * POST /.netlify/functions/razorpay-webhook
@@ -32,11 +33,10 @@ export const handler = async (event: Event): Promise<Result> => {
     }
 
     // Trust the order we created, not the webhook body alone.
-    const { months, currency } = pricing();
     const order = await fetchOrder(payment.order_id);
     const userId = order.notes?.user_id;
-    const expected = priceFor(order.notes?.tier);
-    if (!userId || expected === null || order.amount !== expected || payment.amount !== expected || order.currency !== currency) {
+    const expected = priceFor(order.currency, order.notes?.tier);
+    if (!userId || expected === null || order.amount !== expected || payment.amount !== expected || payment.currency !== order.currency) {
       console.error('Webhook payment rejected: order/amount mismatch', payment.id);
       return json(400, { error: 'Order does not match subscription.' });
     }
@@ -46,8 +46,8 @@ export const handler = async (event: Event): Promise<Result> => {
       paymentId: payment.id,
       orderId: payment.order_id,
       amount: expected,
-      currency,
-      months,
+      currency: order.currency,
+      months: SUBSCRIPTION_MONTHS,
     });
     return json(200, { ok: true, alreadyProcessed: result.alreadyProcessed });
   } catch (err: any) {

@@ -3,10 +3,9 @@ import { Lock, Loader2, CalendarClock, LogOut } from 'lucide-react';
 import { Session } from '@supabase/supabase-js';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { startSubscriptionCheckout } from '../lib/payments';
+import { CURRENCIES, CURRENCY_NAMES, Currency, PRICE_LABELS } from '../../shared/pricing';
 
 const RENEWAL_WARNING_DAYS = 30;
-// Shown on the paywall, e.g. "₹50,000 for the first 12 months · ₹4,000 per 12 months after".
-const PLAN_PRICE_LABEL = import.meta.env.VITE_PLAN_PRICE_LABEL || '';
 
 interface GateProps {
   children: React.ReactNode;
@@ -177,7 +176,24 @@ const LoginForm: React.FC = () => {
   );
 };
 
+const CurrencyPicker: React.FC<{ value: Currency; onChange: (c: Currency) => void; disabled?: boolean }> = ({ value, onChange, disabled }) => (
+  <label className="block text-left text-xs text-slate-400">
+    Pay in
+    <select
+      value={value}
+      disabled={disabled}
+      onChange={(e) => onChange(e.target.value as Currency)}
+      className="mt-1 w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+    >
+      {CURRENCIES.map((c) => (
+        <option key={c} value={c}>{CURRENCY_NAMES[c]}</option>
+      ))}
+    </select>
+  </label>
+);
+
 const Paywall: React.FC<{ email: string; expiredAt: Date | null; onPaid: () => void }> = ({ email, expiredAt, onPaid }) => {
+  const [currency, setCurrency] = useState<Currency>('INR');
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<{ text: string; error: boolean } | null>(null);
 
@@ -185,7 +201,7 @@ const Paywall: React.FC<{ email: string; expiredAt: Date | null; onPaid: () => v
     setBusy(true);
     setMessage(null);
     try {
-      const result = await startSubscriptionCheckout((msg) => setMessage({ text: msg, error: false }));
+      const result = await startSubscriptionCheckout(currency, (msg) => setMessage({ text: msg, error: false }));
       if (result.status === 'paid') {
         setMessage({ text: 'Payment confirmed. Welcome back!', error: false });
         onPaid();
@@ -211,7 +227,12 @@ const Paywall: React.FC<{ email: string; expiredAt: Date | null; onPaid: () => v
           ? `Your subscription ended on ${expiredAt.toLocaleDateString()} and was not renewed, so access is suspended. Renew to restore it. Your data stays on this device.`
           : 'One payment unlocks full access for 12 months.'}
       </p>
-      {PLAN_PRICE_LABEL && <p className="text-lg font-bold text-slate-100">{PLAN_PRICE_LABEL}</p>}
+      <CurrencyPicker value={currency} onChange={setCurrency} disabled={busy} />
+      <p className="text-lg font-bold text-slate-100">
+        {expiredAt ? PRICE_LABELS[currency].renewal : PRICE_LABELS[currency].first_year}{' '}
+        <span className="text-xs font-normal text-slate-400">{expiredAt ? 'to renew for 12 months' : 'for the first 12 months'}</span>
+      </p>
+      {!expiredAt && <p className="text-xs text-slate-400">Renewals: {PRICE_LABELS[currency].renewal} per 12 months</p>}
       <button onClick={pay} disabled={busy}
         className="w-full py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-sm disabled:opacity-60">
         {busy ? 'Working…' : expiredAt ? 'Renew access' : 'Subscribe now'}
@@ -225,6 +246,7 @@ const Paywall: React.FC<{ email: string; expiredAt: Date | null; onPaid: () => v
 };
 
 const RenewalBanner: React.FC<{ expiresAt: Date; daysLeft: number; onRenewed: () => void }> = ({ expiresAt, daysLeft, onRenewed }) => {
+  const [currency, setCurrency] = useState<Currency>('INR');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -232,7 +254,7 @@ const RenewalBanner: React.FC<{ expiresAt: Date; daysLeft: number; onRenewed: ()
     setBusy(true);
     setError(null);
     try {
-      const result = await startSubscriptionCheckout();
+      const result = await startSubscriptionCheckout(currency);
       if (result.status === 'paid') onRenewed();
     } catch (err: any) {
       setError(err.message || 'Renewal failed.');
@@ -249,9 +271,22 @@ const RenewalBanner: React.FC<{ expiresAt: Date; daysLeft: number; onRenewed: ()
           {daysLeft <= 1 ? 'Your access ends today' : `${daysLeft} days left`} (until {expiresAt.toLocaleDateString()}). Renewals are manual.
           {error && <span className="text-rose-300 ml-2">{error}</span>}
         </span>
-        <button onClick={renew} disabled={busy} className="px-3 py-1 rounded bg-amber-400 text-slate-950 font-semibold disabled:opacity-60">
-          {busy ? 'Working…' : 'Renew now'}
-        </button>
+        <span className="inline-flex items-center gap-2">
+          <select
+            value={currency}
+            disabled={busy}
+            onChange={(e) => setCurrency(e.target.value as Currency)}
+            className="bg-slate-800 border border-amber-500/40 rounded px-2 py-1 text-xs text-slate-100"
+            aria-label="Renewal currency"
+          >
+            {CURRENCIES.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+          <button onClick={renew} disabled={busy} className="px-3 py-1 rounded bg-amber-400 text-slate-950 font-semibold disabled:opacity-60">
+            {busy ? 'Working…' : `Renew now (${PRICE_LABELS[currency].renewal})`}
+          </button>
+        </span>
       </div>
     </div>
   );

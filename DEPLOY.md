@@ -2,6 +2,10 @@
 
 ## Plan and rules
 
+Prices are in `shared/pricing.ts`. Customers choose INR, USD, CAD, GBP, or AUD on the paywall. The old price variables (`FIRST_YEAR_AMOUNT_PAISE`, `RENEWAL_AMOUNT_PAISE`, `SUBSCRIPTION_CURRENCY`, `SUBSCRIPTION_MONTHS`, `VITE_PLAN_PRICE_LABEL`) are no longer read and can be deleted in Netlify.
+
+International payments must be enabled on your Razorpay account for each currency before customers can pay in it.
+
 | Rule | Behaviour |
 |---|---|
 | First 12 months | INR 50,000, one payment |

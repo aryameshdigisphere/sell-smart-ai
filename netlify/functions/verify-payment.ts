@@ -1,8 +1,9 @@
 import { Event, Result, json } from '../lib/http';
-import { ConfigError, priceFor, pricing, requireEnv } from '../lib/env';
+import { ConfigError, requireEnv } from '../lib/env';
 import { verifyCheckoutSignature } from '../lib/crypto';
 import { fetchOrder, fetchPayment } from '../lib/razorpay';
 import { recordPayment, userFromBearer } from '../lib/supabase-admin';
+import { SUBSCRIPTION_MONTHS, priceFor } from '../../shared/pricing';
 
 /**
  * POST /.netlify/functions/verify-payment
@@ -30,20 +31,19 @@ export const handler = async (event: Event): Promise<Result> => {
       return json(400, { error: 'Payment signature could not be verified.' });
     }
 
-    // 2. The order must belong to this customer and carry a known tier at that tier's price.
-    const { months, currency } = pricing();
+    // 2. The order must belong to this customer and carry a known currency and tier at that price.
     const order = await fetchOrder(orderId);
     if (order.notes?.user_id !== user.id) {
       return json(403, { error: 'This payment does not belong to your account.' });
     }
-    const expected = priceFor(order.notes?.tier);
-    if (expected === null || order.amount !== expected || order.currency !== currency) {
+    const expected = priceFor(order.currency, order.notes?.tier);
+    if (expected === null || order.amount !== expected) {
       return json(400, { error: 'Payment amount does not match the subscription price.' });
     }
 
     // 3. Ask Razorpay directly for the payment's current status.
     const payment = await fetchPayment(paymentId);
-    if (payment.order_id !== orderId || payment.amount !== expected) {
+    if (payment.order_id !== orderId || payment.amount !== expected || payment.currency !== order.currency) {
       return json(400, { error: 'Payment details do not match the order.' });
     }
     if (payment.status === 'authorized') {
@@ -59,8 +59,8 @@ export const handler = async (event: Event): Promise<Result> => {
       paymentId,
       orderId,
       amount: expected,
-      currency,
-      months,
+      currency: order.currency,
+      months: SUBSCRIPTION_MONTHS,
     });
     return json(200, {
       active: true,

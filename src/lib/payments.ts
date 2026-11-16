@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import type { Currency } from '../../shared/pricing';
 
 /**
  * Browser-side Razorpay Checkout. Order creation and payment verification happen
@@ -60,14 +61,15 @@ export interface CheckoutResult {
  * Resolves when the payment is verified server-side, or when the customer closes the window.
  */
 export async function startSubscriptionCheckout(
+  currency: Currency,
   onProgress?: (msg: string) => void
 ): Promise<CheckoutResult> {
   onProgress?.('Preparing secure checkout…');
   const token = await accessToken();
 
-  const created = await postFunction('create-order', {}, token);
+  const created = await postFunction('create-order', { currency }, token);
   if (!created.ok) throw new Error(created.data?.error || 'Could not start checkout.');
-  const { orderId, amount, currency, keyId, email, months } = created.data;
+  const { orderId, amount, keyId, email, months } = created.data;
 
   await loadCheckoutScript();
 
