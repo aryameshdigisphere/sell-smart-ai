@@ -433,7 +433,14 @@ function Dashboard() {
             <span>•</span>
             <span>Ecommerce Profit Engineering & Inventory Suite</span>
           </div>
-          <div className="flex items-center gap-4 text-slate-400">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-slate-400">
+            <a href="/about" className="hover:text-emerald-400 underline underline-offset-2">About</a>
+            <a href="/contact" className="hover:text-emerald-400 underline underline-offset-2">Contact</a>
+            <a href="/pricing" className="hover:text-emerald-400 underline underline-offset-2">Pricing</a>
+            <a href="/terms" className="hover:text-emerald-400 underline underline-offset-2">Terms</a>
+            <a href="/privacy" className="hover:text-emerald-400 underline underline-offset-2">Privacy</a>
+            <a href="/refund-policy" className="hover:text-emerald-400 underline underline-offset-2">Refunds</a>
+            <a href="/delivery-policy" className="hover:text-emerald-400 underline underline-offset-2">Delivery</a>
             <span>Client Currency: <strong className="text-slate-200">{currency}</strong></span>
             <span>•</span>
             <button

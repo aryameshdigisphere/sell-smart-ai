@@ -120,6 +120,14 @@ const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => (
       </div>
       {children}
     </div>
+    <nav className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-slate-500">
+      <a href="/pricing" className="hover:text-emerald-400 underline underline-offset-2">Pricing</a>
+      <a href="/terms" className="hover:text-emerald-400 underline underline-offset-2">Terms</a>
+      <a href="/privacy" className="hover:text-emerald-400 underline underline-offset-2">Privacy</a>
+      <a href="/refund-policy" className="hover:text-emerald-400 underline underline-offset-2">Refunds</a>
+      <a href="/delivery-policy" className="hover:text-emerald-400 underline underline-offset-2">Delivery</a>
+      <a href="/contact" className="hover:text-emerald-400 underline underline-offset-2">Contact</a>
+    </nav>
   </div>
 );
 
