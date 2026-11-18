@@ -16,22 +16,22 @@ export const CURRENCY_NAMES: Record<Currency, string> = {
   AUD: 'Australian Dollar (A$)',
 };
 
-// Customer prices. International prices include Razorpay's international card fee.
+// Customer prices. International prices include Razorpay's international card fee (3.54%).
 export const PRICES: Record<Currency, Record<Tier, number>> = {
-  INR: { first_year: 5000000, renewal: 400000 }, // ₹50,000 / ₹4,000
-  USD: { first_year: 54000, renewal: 4000 },     // $540 / $40
-  CAD: { first_year: 74500, renewal: 6000 },     // C$745 / C$60
-  GBP: { first_year: 39500, renewal: 3000 },     // £395 / £30
-  AUD: { first_year: 74500, renewal: 6000 },     // A$745 / A$60
+  INR: { first_year: 1500000, renewal: 600000 }, // ₹15,000 / ₹6,000
+  USD: { first_year: 16500, renewal: 6000 },     // $165 / $60
+  CAD: { first_year: 22500, renewal: 9000 },     // C$225 / C$90
+  GBP: { first_year: 12000, renewal: 4500 },     // £120 / £45
+  AUD: { first_year: 22500, renewal: 9000 },     // A$225 / A$90
 };
 
 // Display text for the paywall.
 export const PRICE_LABELS: Record<Currency, Record<Tier, string>> = {
-  INR: { first_year: '₹50,000', renewal: '₹4,000' },
-  USD: { first_year: '$540', renewal: '$40' },
-  CAD: { first_year: 'C$745', renewal: 'C$60' },
-  GBP: { first_year: '£395', renewal: '£30' },
-  AUD: { first_year: 'A$745', renewal: 'A$60' },
+  INR: { first_year: '₹15,000', renewal: '₹6,000' },
+  USD: { first_year: '$165', renewal: '$60' },
+  CAD: { first_year: 'C$225', renewal: 'C$90' },
+  GBP: { first_year: '£120', renewal: '£45' },
+  AUD: { first_year: 'A$225', renewal: 'A$90' },
 };
 
 export function isCurrency(value: unknown): value is Currency {
