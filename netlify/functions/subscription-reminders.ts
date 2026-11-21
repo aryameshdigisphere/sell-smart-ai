@@ -46,7 +46,7 @@ export const handler = async (_event: Event): Promise<Result> => {
           `To keep access, renew from the app before that date. Renewals are paid manually. ` +
           `If the subscription ends unpaid, your access is suspended until you renew.\n\n` +
           `Your data is stored in your browser and is not deleted when access is suspended.\n\n` +
-          `— SELL SMART AI`,
+          `— AryameshDigiSphere\nSupport: support@aryameshdigisphere.online`,
       );
 
       await db

@@ -79,7 +79,7 @@ export async function startSubscriptionCheckout(
       amount,
       currency,
       order_id: orderId,
-      name: 'SELL SMART AI',
+      name: 'AryameshDigiSphere',
       description: `Subscription: ${months} months of access`,
       prefill: { email },
       theme: { color: '#10b981' },

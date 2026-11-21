@@ -1,6 +1,6 @@
 import React from 'react';
 
-const EMAIL = 'aryameshdigisphere@gmail.com';
+const EMAIL = 'support@aryameshdigisphere.online';
 const LAST_UPDATED = '16 November 2026';
 
 type PageKey = 'about' | 'contact' | 'pricing' | 'terms' | 'privacy' | 'refund' | 'delivery';
@@ -42,7 +42,7 @@ export function PolicyPages({ page }: { page: PageKey }) {
       <h1 className="mb-3 text-3xl font-black tracking-tight text-white">{meta.title}</h1>
       <p className="mb-8 text-slate-400">{meta.intro}</p>
       {page === 'about' && <>
-        <Section title="What we offer"><p>SELL SMART AI is a browser-based business productivity application designed to support sellers and small businesses with sales and profit calculations, product and inventory records, order tracking, and AI-assisted marketing content.</p><p>The software is intended as a practical planning and productivity aid. It does not replace professional accounting, tax, legal or business advice.</p></Section>
+        <Section title="Who we are"><p>SELL SMART AI is provided by AryameshDigiSphere. Website: sellsmart.aryameshdigisphere.online. Support: <a className="text-emerald-400 underline" href={`mailto:${EMAIL}`}>{EMAIL}</a></p></Section><Section title="What we offer"><p>SELL SMART AI is a browser-based business productivity application designed to support sellers and small businesses with sales and profit calculations, product and inventory records, order tracking, and AI-assisted marketing content.</p><p>The software is intended as a practical planning and productivity aid. It does not replace professional accounting, tax, legal or business advice.</p></Section>
         <Section title="Our approach"><p>We aim to provide useful tools with clear pricing and straightforward digital access. Users are responsible for checking their business data and reviewing AI-generated material before relying on or publishing it.</p></Section>
         <Section title="Contact"><p>For questions, email <a className="text-emerald-400 underline" href={`mailto:${EMAIL}`}>{EMAIL}</a>.</p></Section>
       </>}
@@ -56,7 +56,7 @@ export function PolicyPages({ page }: { page: PageKey }) {
         <Section title="Purchase"><p>Payment is processed through Razorpay or another payment method expressly presented at checkout. App access is provided after successful server-side payment verification.</p><p>For billing questions, contact <a className="text-emerald-400 underline" href={`mailto:${EMAIL}`}>{EMAIL}</a>.</p></Section>
       </>}
       {page === 'terms' && <>
-        <Section title="1. Acceptance and eligibility"><p>By accessing, purchasing or using SELL SMART AI, you agree to these Terms and Conditions. If you do not agree, do not use the service. You must be legally capable of entering into a binding agreement under applicable law.</p></Section>
+        <Section title="Service provider"><p>SELL SMART AI is operated by AryameshDigiSphere. Website: sellsmart.aryameshdigisphere.online. Contact: <a className="text-emerald-400 underline" href={`mailto:${EMAIL}`}>{EMAIL}</a></p></Section><Section title="1. Acceptance and eligibility"><p>By accessing, purchasing or using SELL SMART AI, you agree to these Terms and Conditions. If you do not agree, do not use the service. You must be legally capable of entering into a binding agreement under applicable law.</p></Section>
         <Section title="2. Product and access period"><p>SELL SMART AI provides browser-based tools for sales and profit calculations, product and inventory management, order records and AI-assisted content creation. The standard offer displayed on this website is ₹5,000 (or the equivalent in USD, CAD, GBP or AUD shown at checkout) for 12 months of access, followed by a manual annual renewal of ₹1,500 (or the equivalent shown at renewal) for each additional 12-month period.</p><p>Access begins after successful payment verification and any required account setup. Renewal is not automatic. If payment is not received and verified by the end of the current access period, access may be suspended until renewal is completed.</p></Section>
         <Section title="3. Payments"><p>Payments are processed by Razorpay or the payment provider displayed at checkout. We do not ask for or store your card PIN, UPI PIN, CVV or OTP. Payment confirmation is subject to verification by the payment provider and our server-side records.</p></Section>
         <Section title="4. Acceptable use"><p>You must use the service lawfully and must not attempt to disrupt, reverse engineer, gain unauthorized access to, or misuse the service. You are responsible for keeping your account credentials secure and for activity under your account.</p></Section>
@@ -91,7 +91,7 @@ export function PolicyPages({ page }: { page: PageKey }) {
       </>}
       <p className="mt-10 border-t border-slate-800 pt-5 text-xs text-slate-500">Last updated: {LAST_UPDATED} · Support: <a className="text-emerald-400" href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
     </main>
-    <footer className="border-t border-slate-800 bg-slate-900/50"><div className="mx-auto flex max-w-5xl flex-wrap gap-x-5 gap-y-3 px-5 py-7 text-xs text-slate-400">{links.map(item => <a key={item.key} href={`/${item.key === 'refund' ? 'refund-policy' : item.key === 'delivery' ? 'delivery-policy' : item.key}`} className="hover:text-emerald-400">{item.label}</a>)}<span className="w-full">© {new Date().getFullYear()} SELL SMART AI. All rights reserved.</span></div></footer>
+    <footer className="border-t border-slate-800 bg-slate-900/50"><div className="mx-auto flex max-w-5xl flex-wrap gap-x-5 gap-y-3 px-5 py-7 text-xs text-slate-400">{links.map(item => <a key={item.key} href={`/${item.key === 'refund' ? 'refund-policy' : item.key === 'delivery' ? 'delivery-policy' : item.key}`} className="hover:text-emerald-400">{item.label}</a>)}<span className="w-full">© {new Date().getFullYear()} AryameshDigiSphere. SELL SMART AI is operated by AryameshDigiSphere. All rights reserved.</span></div></footer>
   </div>;
 }
 
