@@ -25,6 +25,12 @@ export const CURRENCIES: Record<Currency, CurrencyConfig> = {
     name: 'Australian Dollar',
     rate: 1.54,
   },
+  INR: {
+    code: 'INR',
+    symbol: '₹',
+    name: 'Indian Rupee',
+    rate: 95.65, // Approximate USD to INR rate. Update to the current rate.
+  },
 };
 
 /**

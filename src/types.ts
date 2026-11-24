@@ -1,4 +1,4 @@
-export type Currency = 'USD' | 'GBP' | 'CAD' | 'AUD';
+export type Currency = 'USD' | 'GBP' | 'CAD' | 'AUD' | 'INR';
 
 export interface CurrencyConfig {
   code: Currency;

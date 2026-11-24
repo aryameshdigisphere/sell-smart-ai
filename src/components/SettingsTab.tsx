@@ -297,7 +297,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                 Display Currency (Default: USD)
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {(['USD', 'GBP', 'CAD', 'AUD'] as Currency[]).map((cCode) => {
+                {(['USD', 'GBP', 'CAD', 'AUD', 'INR'] as Currency[]).map((cCode) => {
                   const cfg = CURRENCIES[cCode];
                   const isSelected = currency === cCode;
                   return (
