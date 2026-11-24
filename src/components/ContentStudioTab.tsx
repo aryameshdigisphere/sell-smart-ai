@@ -10,6 +10,7 @@ import {
   Hash, 
   Instagram, 
   Facebook, 
+  Youtube, 
   Pin as PinterestIcon, 
   FileText, 
   Heart, 
@@ -1207,6 +1208,7 @@ export const ContentStudioTab: React.FC<ContentStudioTabProps> = ({
                     { id: 'Instagram' as SocialPlatform, label: 'Instagram', icon: Instagram },
                     { id: 'Facebook' as SocialPlatform, label: 'Facebook', icon: Facebook },
                     { id: 'Pinterest' as SocialPlatform, label: 'Pinterest', icon: PinterestIcon },
+                    { id: 'YouTube' as SocialPlatform, label: 'YouTube', icon: Youtube },
                   ].map((p) => {
                     const Icon = p.icon;
                     const isSelected = socialPlatform === p.id;

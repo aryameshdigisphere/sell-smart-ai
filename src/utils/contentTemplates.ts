@@ -191,7 +191,31 @@ export function generateSmartTemplates({
 
   let variations: { id: string; title: string; hook: string; body: string; callToAction: string }[] = [];
 
-  if (platform === 'Pinterest') {
+  if (platform === 'YouTube') {
+    variations = [
+      {
+        id: 'var-1',
+        title: 'Product Review Video Title & Hook',
+        hook: `I Tested the ${cleanName} for a Week: Honest Review 🎥`,
+        body: `In this video we put the ${cleanName} through everyday use to see if it lives up to the claims.\n\nWhat we looked at:\n- ${features[0]}\n- ${features[1] || 'Everyday comfort and handling'}\n- Value for ${cleanAudience}\n\nChapters: 0:00 Intro | 0:30 Features | 1:30 Real-world test | 3:00 Verdict`,
+        callToAction: `👍 Subscribe for more honest reviews, and tap the link in the description to shop ${shippingNote}.`,
+      },
+      {
+        id: 'var-2',
+        title: 'How-To & Buyer Guide',
+        hook: `How to Choose the Right ${cleanCategory} (and Why the ${cleanName} Stands Out) 🛒`,
+        body: `Buying ${cleanCategory.toLowerCase()} online can be confusing. This guide walks you through what to check before you buy, and shows how the ${cleanName} compares.\n\nKey points covered:\n✓ ${features[0]}\n✓ Durable build for daily use\n✓ Who it suits best across ${countryTerm}`,
+        callToAction: `Watch to the end for the buyer checklist, and use the link in the description to see current prices.`,
+      },
+      {
+        id: 'var-3',
+        title: 'Unboxing & First Impressions',
+        hook: `Unboxing the ${cleanName}: First Impressions 📦`,
+        body: `Here is our unboxing of the ${cleanName}, from first look to first use. We cover the packaging, build quality, and the details that matter for ${cleanAudience}.\n\nWatch for: ${features[0]}.`,
+        callToAction: `Like the video if you want a full review next, and tap the link in the description to shop.`,
+      },
+    ];
+  } else if (platform === 'Pinterest') {
     variations = [
       {
         id: 'var-1',

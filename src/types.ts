@@ -96,7 +96,7 @@ export type TargetCountry = 'USA' | 'UK' | 'Canada' | 'Australia' | 'India';
 
 export type SearchIntent = 'transactional' | 'commercial' | 'informational';
 
-export type SocialPlatform = 'Instagram' | 'Facebook' | 'Pinterest';
+export type SocialPlatform = 'Instagram' | 'Facebook' | 'Pinterest' | 'YouTube';
 
 export interface SEOKeywordsData {
   primaryKeywords: string[]; // 5-10
