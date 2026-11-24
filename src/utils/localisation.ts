@@ -68,7 +68,7 @@ export function localiseText(text: string, options: LocalisationOptions): string
 
   const { country, useCanadianEnglish = true } = options;
 
-  if (country === 'UK' || country === 'Australia' || (country === 'Canada' && useCanadianEnglish)) {
+  if (country === 'UK' || country === 'Australia' || country === 'India' || (country === 'Canada' && useCanadianEnglish)) {
     let result = text;
     for (const [regex, replacement] of US_TO_UK_MAP) {
       result = result.replace(regex, (match) => {

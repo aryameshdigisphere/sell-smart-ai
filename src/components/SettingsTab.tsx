@@ -338,6 +338,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                 <option value="UK">United Kingdom (British Pound, UK English: personalised, colour)</option>
                 <option value="Canada">Canada (Canadian Dollar, Bilingual / Commonwealth English)</option>
                 <option value="Australia">Australia (Australian Dollar, Commonwealth English: personalised, colour)</option>
+                <option value="India">India (Indian Rupee, Indian English: personalised, colour)</option>
               </select>
             </div>
 

@@ -92,7 +92,7 @@ export type ContentTone =
   | 'Emotional' 
   | 'Sales-focused';
 
-export type TargetCountry = 'USA' | 'UK' | 'Canada' | 'Australia';
+export type TargetCountry = 'USA' | 'UK' | 'Canada' | 'Australia' | 'India';
 
 export type SearchIntent = 'transactional' | 'commercial' | 'informational';
 

@@ -595,6 +595,7 @@ export const ContentStudioTab: React.FC<ContentStudioTabProps> = ({
     { code: 'UK', label: 'United Kingdom', flag: '🇬🇧' },
     { code: 'Canada', label: 'Canada', flag: '🇨🇦' },
     { code: 'Australia', label: 'Australia', flag: '🇦🇺' },
+    { code: 'India', label: 'India', flag: '🇮🇳' },
   ];
 
   // Search intent options

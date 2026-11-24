@@ -56,6 +56,7 @@ export function generateSmartTemplates({
     UK: 'UK',
     Canada: 'Canada',
     Australia: 'Australia',
+    India: 'India',
   }[targetCountry];
 
   const shippingNote = {
@@ -63,6 +64,7 @@ export function generateSmartTemplates({
     UK: 'Express UK dispatch with Royal Mail & DPD',
     Canada: 'Reliable Canada-wide shipping with tracking',
     Australia: 'Fast Australia-wide courier dispatch',
+    India: 'Fast India-wide dispatch & delivery',
   }[targetCountry];
 
   // Intent helpers
