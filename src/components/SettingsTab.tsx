@@ -105,7 +105,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isSupabaseConfigured) {
-      setAuthMessage({ text: 'Please configure VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY in .env.local first.', isError: true });
+      setAuthMessage({ text: 'Sign-in is loading. Please refresh the page.', isError: true });
       return;
     }
     if (!authEmail.trim() || !authPassword.trim()) {
@@ -424,16 +424,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
               </select>
             </div>
 
-            {/* Safe AI Status Banner */}
-            <div className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2">
-              <div className="flex items-center gap-2 text-emerald-400 font-semibold">
-                <ShieldCheck className="h-4 w-4" />
-                <span>Zero-API Key Exposure Architecture</span>
-              </div>
-              <p className="text-[11px] text-slate-400 leading-relaxed">
-                SELL SMART AI connects to Gemini models via a secure backend proxy route (<code className="text-slate-300">/api/generate</code>). Your API key is never bundled in frontend code. If no key is set, the built-in Smart Template Fallback works 100% offline.
-              </p>
-            </div>
+            
 
           </div>
         </div>
@@ -520,104 +511,17 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
           </div>
         </div>
 
-        {/* Card 4: 100% Free Deployment Guide for Small Businesses */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
-          <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
-            <Server className="h-5 w-5 text-teal-400" />
-            <h2 className="text-base font-bold text-white">Free Hosting & Deployment Guide</h2>
-          </div>
+        
 
-          <div className="space-y-3 text-xs text-slate-300 leading-relaxed">
-            <p>
-              SELL SMART AI is a full-stack Node.js + React app designed for zero-cost hosting on generous free tiers:
-            </p>
-
-            {/* Option 1: Google Cloud Run */}
-            <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 space-y-1">
-              <div className="flex items-center justify-between font-bold text-white">
-                <span className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-teal-400" />
-                  Option 1: Google Cloud Run (Free Tier)
-                </span>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-teal-500/20 text-teal-300 font-mono">Recommended</span>
-              </div>
-              <p className="text-[11px] text-slate-400">
-                Offers 2 million free requests per month. Auto-scales to 0 when idle, so it costs $0.00 for small sellers.
-              </p>
-            </div>
-
-            {/* Option 2: Vercel / Render */}
-            <div className="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 space-y-1">
-              <div className="flex items-center justify-between font-bold text-white">
-                <span className="flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-indigo-400" />
-                  Option 2: Vercel or Render
-                </span>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-mono">1-Click Git</span>
-              </div>
-              <p className="text-[11px] text-slate-400">
-                Connect your GitHub repository. Build command: <code className="text-slate-200">npm run build</code>, Start command: <code className="text-slate-200">npm start</code>.
-              </p>
-            </div>
-
-            {/* Setting GEMINI_API_KEY */}
-            <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2">
-              <span className="font-bold text-slate-200 flex items-center gap-1.5">
-                <Key className="h-3.5 w-3.5 text-amber-400" />
-                Environment Variable Configuration
-              </span>
-              <p className="text-[11px] text-slate-400">
-                In your host’s dashboard, add this single secret:
-              </p>
-              <div className="p-2 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-between font-mono text-[11px] text-emerald-400">
-                <span>GEMINI_API_KEY=&quot;your_free_gemini_key&quot;</span>
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText('GEMINI_API_KEY');
-                    setCopiedKeyGuide(true);
-                    setTimeout(() => setCopiedKeyGuide(false), 2000);
-                  }}
-                  className="text-slate-400 hover:text-white"
-                  title="Copy var name"
-                >
-                  {copiedKeyGuide ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
-                </button>
-              </div>
-              <p className="text-[10px] text-slate-500">
-                Get a 100% free API key with generous rate limits from <a href="https://aistudio.google.com" target="_blank" rel="noreferrer" className="text-indigo-400 underline">aistudio.google.com</a>.
-              </p>
-            </div>
-
+            
           </div>
         </div>
 
         {/* Card 5: Supabase Authentication Support */}
         <div className="lg:col-span-2 bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-                <Lock className="h-4 w-4" />
-              </div>
-              <div>
-                <h2 className="text-base font-bold text-white">Supabase Authentication Support</h2>
-                <p className="text-xs text-slate-400">Official @supabase/supabase-js client integration for user accounts & sessions</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              {isSupabaseConfigured ? (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Supabase Configured
-                </span>
-              ) : (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30">
-                  <span className="w-2 h-2 rounded-full bg-amber-400" />
-                  Ready for Credentials
-                </span>
-              )}
-            </div>
-          </div>
+        <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+        <h2 className="text-base font-bold text-white">Account</h2>
+      </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 text-xs">
             {/* Left: Live Auth Panel or Sign In / Up */}
@@ -632,7 +536,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                       </div>
                       <div>
                         <span className="font-bold text-white block text-sm">{authUser.email}</span>
-                        <span className="text-[10px] text-slate-400 font-mono">User ID: {authUser.id}</span>
+      
                       </div>
                     </div>
 
@@ -647,10 +551,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                     </button>
                   </div>
 
-                  <div className="pt-2 border-t border-slate-700/60 text-[11px] text-slate-400 flex items-center gap-1.5">
-                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
-                    <span>Active session authenticated via Supabase Auth. Tokens are refreshed automatically.</span>
-                  </div>
+              
                 </div>
               ) : (
                 /* Unauthenticated / Sign-In / Sign-Up Form */
