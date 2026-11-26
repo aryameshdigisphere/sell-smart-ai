@@ -112,11 +112,14 @@ export const SubscriptionGate: React.FC<GateProps> = ({ children }) => {
 };
 
 const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4">
+  <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center p-4">
     <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
       <div className="text-center mb-5">
         <span className="font-extrabold text-lg tracking-tight">SELL SMART</span>
         <span className="ml-2 text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">AI</span>
+        <p className="mt-3 text-sm text-slate-300 leading-relaxed">
+          Real-time monitoring of your DTC sales velocity, net profit margins, inventory depletion alerts, and marketing copy generation.
+        </p>
       </div>
       {children}
     </div>
