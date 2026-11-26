@@ -134,7 +134,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
           password: authPassword.trim(),
         });
         if (error) throw error;
-        setAuthMessage({ text: 'Signed in successfully with Supabase!', isError: false });
+        setAuthMessage({ text: 'Signed in successfully!', isError: false });
         setAuthPassword('');
       }
     } catch (err: any) {
@@ -150,7 +150,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
     try {
       await supabase.auth.signOut();
       setAuthUser(null);
-      setAuthMessage({ text: 'Signed out of Supabase successfully.', isError: false });
+      setAuthMessage({ text: 'You have been signed out.', isError: false });
     } catch (err: any) {
       setAuthMessage({ text: err.message || 'Error signing out.', isError: true });
     } finally {
@@ -297,7 +297,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                 Display Currency (Default: USD)
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {(['USD', 'GBP', 'CAD', 'AUD', 'INR'] as Currency[]).map((cCode) => {
+                {(['USD', 'GBP', 'CAD', 'AUD'] as Currency[]).map((cCode) => {
                   const cfg = CURRENCIES[cCode];
                   const isSelected = currency === cCode;
                   return (
@@ -338,7 +338,6 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                 <option value="UK">United Kingdom (British Pound, UK English: personalised, colour)</option>
                 <option value="Canada">Canada (Canadian Dollar, Bilingual / Commonwealth English)</option>
                 <option value="Australia">Australia (Australian Dollar, Commonwealth English: personalised, colour)</option>
-                <option value="India">India (Indian Rupee, Indian English: personalised, colour)</option>
               </select>
             </div>
 
@@ -424,7 +423,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
               </select>
             </div>
 
-            
+        
 
           </div>
         </div>
@@ -511,17 +510,22 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
           </div>
         </div>
 
-        
-
-            
-          </div>
-        </div>
-
         {/* Card 5: Supabase Authentication Support */}
         <div className="lg:col-span-2 bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
-        <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
-        <h2 className="text-base font-bold text-white">Account</h2>
-      </div>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                <Lock className="h-4 w-4" />
+              </div>
+              <div>
+                <h2 className="text-base font-bold text-white">Account</h2>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              
+            </div>
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 text-xs">
             {/* Left: Live Auth Panel or Sign In / Up */}
@@ -536,7 +540,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                       </div>
                       <div>
                         <span className="font-bold text-white block text-sm">{authUser.email}</span>
-      
+                        <span className="text-[10px] text-slate-400 font-mono">User ID: {authUser.id}</span>
                       </div>
                     </div>
 
@@ -551,14 +555,14 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                     </button>
                   </div>
 
-              
+                  
                 </div>
               ) : (
                 /* Unauthenticated / Sign-In / Sign-Up Form */
                 <form onSubmit={handleAuthSubmit} className="p-4 rounded-xl bg-slate-800/40 border border-slate-700/60 space-y-3.5">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-white text-xs">
-                      {isSignUpMode ? 'Create a Supabase User Account' : 'Sign In with Supabase Account'}
+                      {isSignUpMode ? 'Create an account' : 'Sign in'}
                     </span>
                     <button
                       type="button"
@@ -616,9 +620,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                   </div>
 
                   <div className="flex items-center justify-between pt-1">
-                    <span className="text-[10px] text-slate-400">
-                      {isSupabaseConfigured ? 'Secured with client-side PKCE flow' : 'Simulated until keys are added'}
-                    </span>
+                    
                     <button
                       type="submit"
                       disabled={authLoading}
@@ -632,35 +634,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
               )}
             </div>
 
-            {/* Right: Security & Setup Instructions */}
-            <div className="lg:col-span-5 space-y-3">
-              <div className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2">
-                <span className="font-bold text-slate-200 flex items-center gap-1.5 text-xs">
-                  <ShieldCheck className="h-4 w-4 text-emerald-400" />
-                  Frontend Credential Safety Rule
-                </span>
-                <p className="text-[11px] text-slate-400 leading-relaxed">
-                  Only provide your Supabase <strong className="text-slate-200">Publishable / Anon key</strong> in client environment variables. Never expose the <code className="text-rose-400 font-mono">service_role</code> secret key or database passwords in frontend code.
-                </p>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2">
-                <span className="font-bold text-slate-200 text-xs block">Required Environment Variables:</span>
-                <div className="space-y-1 font-mono text-[11px]">
-                  <div className="p-1.5 rounded bg-slate-900 border border-slate-800 flex justify-between items-center text-slate-300">
-                    <span>VITE_SUPABASE_URL</span>
-                    <span className="text-[10px] text-emerald-400 font-sans">Project URL</span>
-                  </div>
-                  <div className="p-1.5 rounded bg-slate-900 border border-slate-800 flex justify-between items-center text-slate-300">
-                    <span>VITE_SUPABASE_PUBLISHABLE_KEY</span>
-                    <span className="text-[10px] text-teal-400 font-sans">Anon / Public</span>
-                  </div>
-                </div>
-                <p className="text-[10px] text-slate-500">
-                  Read cleanly via <code className="text-slate-400">import.meta.env</code> from <code className="text-slate-400">src/lib/supabase.ts</code>.
-                </p>
-              </div>
-            </div>
+            
           </div>
         </div>
 
