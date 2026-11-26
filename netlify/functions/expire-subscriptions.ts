@@ -2,7 +2,7 @@ import { adminClient } from '../lib/supabase-admin';
 import { Event, Result, json } from '../lib/http';
 
 /**
- * Scheduled daily. Suspends every active subscription whose period has ended and
+ * Scheduled daily. Suspends every active or trial subscription whose period has ended and
  * was not renewed. Suspension is reversed only by record_payment_and_extend,
  * which runs after a verified payment. This job never restores access.
  */
@@ -13,7 +13,7 @@ export const handler = async (_event: Event): Promise<Result> => {
   const { data, error } = await adminClient()
     .from('subscriptions')
     .update({ status: 'suspended', updated_at: nowIso })
-    .eq('status', 'active')
+    .in('status', ['active', 'trial'])
     .lte('current_period_end', nowIso)
     .select('user_id');
 
