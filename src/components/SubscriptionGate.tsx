@@ -49,7 +49,7 @@ export const SubscriptionGate: React.FC<GateProps> = ({ children }) => {
     if (!data) return setAccess({ state: 'suspended', expiresAt: null });
     const expiresAt = new Date(data.current_period_end);
     // Access requires both an active status and an unexpired period.
-    const isActive = data.status === 'active' && expiresAt.getTime() > Date.now();
+    const isActive = (data.status === 'active' || data.status === 'trial') && expiresAt.getTime() > Date.now();
     setAccess(isActive ? { state: 'active', expiresAt } : { state: 'suspended', expiresAt });
   };
 
@@ -205,6 +205,24 @@ const Paywall: React.FC<{ email: string; expiredAt: Date | null; onPaid: () => v
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<{ text: string; error: boolean } | null>(null);
 
+    const startTrial = async () => {
+    setBusy(true);
+    setMessage(null);
+    try {
+      const { data } = await supabase.auth.getSession();
+      const res = await fetch('/.netlify/functions/start-trial', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${data.session?.access_token ?? ''}` },
+      });
+      const body = await res.json();
+      if (!res.ok) throw new Error(body.error || 'Could not start the trial.');
+      onPaid();
+    } catch (err: any) {
+      setMessage({ text: err.message, error: true });
+    } finally {
+      setBusy(false);
+    }
+  };
   const pay = async () => {
     setBusy(true);
     setMessage(null);
@@ -241,6 +259,12 @@ const Paywall: React.FC<{ email: string; expiredAt: Date | null; onPaid: () => v
         <span className="text-xs font-normal text-slate-400">{expiredAt ? 'to renew for 12 months' : 'for the first 12 months'}</span>
       </p>
       {!expiredAt && <p className="text-xs text-slate-400">Renewals: {PRICE_LABELS[currency].renewal} per 12 months</p>}
+            {!expiredAt && (
+        <button onClick={startTrial} disabled={busy}
+          className="w-full py-2.5 rounded-lg border border-emerald-500 text-emerald-400 font-semibold text-sm disabled:opacity-60">
+          Start 15-day free trial
+        </button>
+      )}
       <button onClick={pay} disabled={busy}
         className="w-full py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-sm disabled:opacity-60">
         {busy ? 'Working…' : expiredAt ? 'Renew access' : 'Subscribe now'}
