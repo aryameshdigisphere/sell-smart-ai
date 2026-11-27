@@ -262,10 +262,10 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             System Preferences & Localization
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            Store Settings & Free Deployment
+            Store Settings
           </h1>
           <p className="text-slate-400 text-sm mt-1 max-w-2xl">
-            Configure multi-currency display, regional spelling localization (USA, UK, Canada, Australia), backup your database, and view zero-cost deployment instructions.
+            Configure currency and regional spelling, and back up your data.
           </p>
         </div>
 
