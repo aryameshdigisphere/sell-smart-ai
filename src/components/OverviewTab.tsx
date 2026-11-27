@@ -363,8 +363,8 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
             <Activity className="h-4 w-4 text-purple-400 group-hover:scale-110 transition-transform" />
             <ArrowRight className="h-3.5 w-3.5 text-slate-500 group-hover:text-purple-400 transition" />
           </div>
-          <h4 className="text-xs font-bold text-white group-hover:text-purple-300 transition">4. Settings & Deploy</h4>
-          <p className="text-[11px] text-slate-400 mt-0.5">Currency, spelling localization & free hosting</p>
+          <h4 className="text-xs font-bold text-white group-hover:text-purple-300 transition">4. Settings </h4>
+          <p className="text-[11px] text-slate-400 mt-0.5">Currency, brand name & data backup</p>
         </button>
       </div>
 
