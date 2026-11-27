@@ -168,12 +168,17 @@ export const OverviewTab: React.FC<OverviewTabProps> = ({
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               Live Operations Dashboard
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Welcome back to <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">SELL SMART AI</span>
-            </h1>
-            <p className="text-slate-400 text-sm mt-1 max-w-2xl">
-              Real-time monitoring of your DTC sales velocity, net profit margins, inventory depletion alerts, and marketing copy generation.
-            </p>
+            
+<h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+  Manage Your Small Business Smarter with{" "}
+  <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">
+    SELL SMART AI
+  </span>
+</h1>
+<p className="text-slate-400 text-sm mt-1 max-w-2xl">
+  SELL SMART AI brings small business management software into one dashboard. Calculate sales and profits, manage orders and inventory, and create SEO-friendly product descriptions and Instagram marketing content with AI tools for online sellers.
+</p>
+
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
