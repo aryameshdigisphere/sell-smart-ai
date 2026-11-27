@@ -4,6 +4,7 @@ import { Session } from '@supabase/supabase-js';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { startSubscriptionCheckout } from '../lib/payments';
 import { CURRENCIES, CURRENCY_NAMES, Currency, PRICE_LABELS } from '../../shared/pricing';
+import { BrandBadge } from './BrandBadge';
 
 const RENEWAL_WARNING_DAYS = 30;
 
@@ -112,7 +113,7 @@ export const SubscriptionGate: React.FC<GateProps> = ({ children }) => {
 };
 
 const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center p-4">
+  <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4">
     <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
       <div className="text-center mb-5">
         <span className="font-extrabold text-lg tracking-tight">SELL SMART</span>
@@ -123,14 +124,6 @@ const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => (
       </div>
       {children}
     </div>
-    <nav className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-slate-500">
-      <a href="/pricing" className="hover:text-emerald-400 underline underline-offset-2">Pricing</a>
-      <a href="/terms" className="hover:text-emerald-400 underline underline-offset-2">Terms</a>
-      <a href="/privacy" className="hover:text-emerald-400 underline underline-offset-2">Privacy</a>
-      <a href="/refund-policy" className="hover:text-emerald-400 underline underline-offset-2">Refunds</a>
-      <a href="/delivery-policy" className="hover:text-emerald-400 underline underline-offset-2">Delivery</a>
-      <a href="/contact" className="hover:text-emerald-400 underline underline-offset-2">Contact</a>
-    </nav>
   </div>
 );
 
@@ -226,7 +219,7 @@ const Paywall: React.FC<{ email: string; expiredAt: Date | null; onPaid: () => v
       setBusy(false);
     }
   };
-  const pay = async () => {
+const pay = async () => {
     setBusy(true);
     setMessage(null);
     try {
@@ -268,7 +261,7 @@ const Paywall: React.FC<{ email: string; expiredAt: Date | null; onPaid: () => v
           Start 15-day free trial
         </button>
       )}
-      <button onClick={pay} disabled={busy}
+<button onClick={pay} disabled={busy}
         className="w-full py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-sm disabled:opacity-60">
         {busy ? 'Working…' : expiredAt ? 'Renew access' : 'Subscribe now'}
       </button>
