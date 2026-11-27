@@ -181,19 +181,19 @@ export const CalculatorTab: React.FC<CalculatorTabProps> = ({
           onClick={() => applyPreset('dtc')}
           className="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700/80 text-slate-300 border border-slate-700/80 font-medium transition shrink-0"
         >
-          High-Margin DTC Brand ({CURRENCIES[currency].symbol}65 / 1.3 units)
+                    High-Margin DTC Brand
         </button>
         <button
           onClick={() => applyPreset('dropship')}
           className="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700/80 text-slate-300 border border-slate-700/80 font-medium transition shrink-0"
         >
-          Fast-Ship Low Ticket ({CURRENCIES[currency].symbol}34.99 / 1 unit)
+                    Fast-Ship Low Ticket
         </button>
         <button
           onClick={() => applyPreset('wholesale')}
           className="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700/80 text-slate-300 border border-slate-700/80 font-medium transition shrink-0"
         >
-          B2B Wholesale / Bundle ({CURRENCIES[currency].symbol}18 / 12 units)
+                    B2B Wholesale / Bundle
         </button>
       </div>
 
