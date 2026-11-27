@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import { CalculatorInput, CalculatorOutput, Currency, Product, SavedScenario } from '../types';
 import { calculateProfit, DEFAULT_CALCULATOR_INPUT } from '../utils/calculator';
-import { formatCurrency } from '../utils/currencies';
+import { CURRENCIES, formatCurrency } from '../utils/currencies';
 
 interface CalculatorTabProps {
   products: Product[];
@@ -181,19 +181,19 @@ export const CalculatorTab: React.FC<CalculatorTabProps> = ({
           onClick={() => applyPreset('dtc')}
           className="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700/80 text-slate-300 border border-slate-700/80 font-medium transition shrink-0"
         >
-          High-Margin DTC Brand ($65 / 1.3 units)
+          High-Margin DTC Brand ({CURRENCIES[currency].symbol}65 / 1.3 units)
         </button>
         <button
           onClick={() => applyPreset('dropship')}
           className="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700/80 text-slate-300 border border-slate-700/80 font-medium transition shrink-0"
         >
-          Fast-Ship Low Ticket ($34.99 / 1 unit)
+          Fast-Ship Low Ticket ({CURRENCIES[currency].symbol}34.99 / 1 unit)
         </button>
         <button
           onClick={() => applyPreset('wholesale')}
           className="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700/80 text-slate-300 border border-slate-700/80 font-medium transition shrink-0"
         >
-          B2B Wholesale / Bundle ($18 / 12 units)
+          B2B Wholesale / Bundle ({CURRENCIES[currency].symbol}18 / 12 units)
         </button>
       </div>
 
@@ -234,7 +234,7 @@ export const CalculatorTab: React.FC<CalculatorTabProps> = ({
                 <span className="text-emerald-400 font-bold">{formatCurrency(input.sellingPrice, currency)}</span>
               </div>
               <div className="relative">
-                <span className="absolute left-3 top-2.5 text-slate-400 text-xs font-bold">$</span>
+                <span className="absolute left-3 top-2.5 text-slate-400 text-xs font-bold">{CURRENCIES[currency].symbol}</span>
                 <input
                   type="number"
                   min="0"
@@ -263,7 +263,7 @@ export const CalculatorTab: React.FC<CalculatorTabProps> = ({
                 <span className="text-slate-300 font-bold">{formatCurrency(input.productCost, currency)}</span>
               </div>
               <div className="relative">
-                <span className="absolute left-3 top-2.5 text-slate-400 text-xs font-bold">$</span>
+                <span className="absolute left-3 top-2.5 text-slate-400 text-xs font-bold">{CURRENCIES[currency].symbol}</span>
                 <input
                   type="number"
                   min="0"
@@ -292,7 +292,7 @@ export const CalculatorTab: React.FC<CalculatorTabProps> = ({
                 <span className="text-slate-300 font-bold">{formatCurrency(input.packaging, currency)}</span>
               </div>
               <div className="relative">
-                <span className="absolute left-3 top-2.5 text-slate-400 text-xs font-bold">$</span>
+                <span className="absolute left-3 top-2.5 text-slate-400 text-xs font-bold">{CURRENCIES[currency].symbol}</span>
                 <input
                   type="number"
                   min="0"
@@ -313,7 +313,7 @@ export const CalculatorTab: React.FC<CalculatorTabProps> = ({
                 <span className="text-slate-300 font-bold">{formatCurrency(input.sellerPaidShipping, currency)}</span>
               </div>
               <div className="relative">
-                <span className="absolute left-3 top-2.5 text-slate-400 text-xs font-bold">$</span>
+                <span className="absolute left-3 top-2.5 text-slate-400 text-xs font-bold">{CURRENCIES[currency].symbol}</span>
                 <input
                   type="number"
                   min="0"
@@ -334,7 +334,7 @@ export const CalculatorTab: React.FC<CalculatorTabProps> = ({
                 <span className="text-slate-300 font-bold">{formatCurrency(input.otherVariableCosts, currency)}</span>
               </div>
               <div className="relative">
-                <span className="absolute left-3 top-2.5 text-slate-400 text-xs font-bold">$</span>
+                <span className="absolute left-3 top-2.5 text-slate-400 text-xs font-bold">{CURRENCIES[currency].symbol}</span>
                 <input
                   type="number"
                   min="0"
@@ -387,7 +387,7 @@ export const CalculatorTab: React.FC<CalculatorTabProps> = ({
                   <span className="text-indigo-400 font-bold">{formatCurrency(input.fixedFeePerOrder, currency)}</span>
                 </div>
                 <div className="relative">
-                  <span className="absolute left-3 top-2.5 text-slate-400 text-xs font-bold">$</span>
+                  <span className="absolute left-3 top-2.5 text-slate-400 text-xs font-bold">{CURRENCIES[currency].symbol}</span>
                   <input
                     type="number"
                     min="0"
