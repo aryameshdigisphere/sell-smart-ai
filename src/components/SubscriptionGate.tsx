@@ -97,6 +97,7 @@ export const SubscriptionGate: React.FC<GateProps> = ({ children }) => {
           <RenewalBanner expiresAt={access.expiresAt} daysLeft={daysLeft} onRenewed={() => loadAccess(session.user.id)} />
         )}
         {children}
+              <BrandBadge />
       </>
     );
   }
